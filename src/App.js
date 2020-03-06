@@ -46,6 +46,11 @@ class App extends React.Component {
   }
 
   render () {
+    const messages = this
+      .props
+      .messages
+      .map(message => <p>{message}</p>)
+
     return <main>
       <form onSubmit={this.onSubmit}>
         <input
@@ -59,6 +64,8 @@ class App extends React.Component {
           Reset
         </button>
       </form>
+
+      {messages}
     </main>
   }
 }
