@@ -2,12 +2,15 @@ import React from 'react';
 import superagent from 'superagent'
 import { connect } from 'react-redux'
 
+const baseUrl = 'http://localhost:4000'
+// const baseUrl = 'https://aqueous-island-05561.herokuapp.com'
+
 class App extends React.Component {
   state = {
     text: ''
   }
 
-  stream = new EventSource('https://aqueous-island-05561.herokuapp.com/stream')
+  stream = new EventSource(`${baseUrl}/stream`)
 
   componentDidMount () {
     this.stream.onmessage = (event) => {
@@ -26,7 +29,7 @@ class App extends React.Component {
 
     try {
       const response = await superagent
-        .post('https://aqueous-island-05561.herokuapp.com/message')
+        .post(`${baseUrl}/message`)
         .send({ text: this.state.text })
 
       console.log(response)
