@@ -54,6 +54,11 @@ class App extends React.Component {
       .messages
       .map(message => <p>{message}</p>)
 
+    const channels = this
+      .props
+      .channels
+      .map(channel => <p>{channel}</p>)
+
     return <main>
       <form onSubmit={this.onSubmit}>
         <input
@@ -68,6 +73,10 @@ class App extends React.Component {
         </button>
       </form>
 
+      <h3>Channels</h3>
+      {channels}
+
+      <h3>Messages</h3>
       {messages}
     </main>
   }
@@ -75,7 +84,8 @@ class App extends React.Component {
 
 function mapStateToProps (state) {
   return {
-    messages: state.messages
+    messages: state.messages,
+    channels: state.channels
   }
 }
 
