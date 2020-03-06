@@ -1,5 +1,6 @@
 import React from 'react';
 import superagent from 'superagent'
+import { connect } from 'react-redux'
 
 class App extends React.Component {
   state = {
@@ -9,8 +10,14 @@ class App extends React.Component {
   stream = new EventSource('http://localhost:4000/stream')
 
   componentDidMount () {
-    this.stream.onmessage = function (event) {
+    this.stream.onmessage = (event) => {
+      // event.data is a JSON string
+      // we need a real JavaScript object to use the data
+      // To convert, use JSON.parse
       console.log('event.data test:', event.data)
+      const parsed = JSON.parse(event.data)
+      this.props.dispatch(parsed)
+      console.log('parsed test:', parsed)
     }
   }
 
@@ -56,4 +63,9 @@ class App extends React.Component {
   }
 }
 
-export default App;
+
+// export default connect()(App);
+
+const connector = connect()
+const connected = connector(App)
+export default connected
