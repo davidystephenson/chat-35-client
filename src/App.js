@@ -2,13 +2,17 @@ import React from 'react';
 import superagent from 'superagent'
 
 class App extends React.Component {
+  state = {
+    text: ''
+  }
+
   onSubmit = async event => {
     event.preventDefault()
 
     try {
       const response = await superagent
         .post('http://localhost:4000/message')
-        .send({ text: 'hardcoded' })
+        .send({ text: this.state.text })
 
       console.log(response)
     } catch (error) {
@@ -16,11 +20,29 @@ class App extends React.Component {
     }
   }
 
+  onChange = event => {
+    this.setState({
+      text: event.target.value
+    })
+  }
+
+  reset = () => {
+    this.setState({ text: '' })
+  }
+
   render () {
     return <main>
       <form onSubmit={this.onSubmit}>
-        <input type='text' />
+        <input
+          type='text'
+          onChange={this.onChange}
+          value={this.state.text}
+        />
         <button>Send</button>
+
+        <button onClick={this.reset}>
+          Reset
+        </button>
       </form>
     </main>
   }
