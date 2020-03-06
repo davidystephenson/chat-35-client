@@ -1,15 +1,14 @@
 import React from 'react';
 import superagent from 'superagent'
 import { connect } from 'react-redux'
+import Form from './Form'
+import Messages from './Messages'
+import { Route, Link } from 'react-router-dom'
 
 const baseUrl = 'http://localhost:4000'
 // const baseUrl = 'https://aqueous-island-05561.herokuapp.com'
 
 class App extends React.Component {
-  state = {
-    text: ''
-  }
-
   stream = new EventSource(`${baseUrl}/stream`)
 
   componentDidMount () {
@@ -24,13 +23,11 @@ class App extends React.Component {
     }
   }
 
-  onSubmit = async event => {
-    event.preventDefault()
-
+  createMessage = async (value) => {
     try {
       const response = await superagent
         .post(`${baseUrl}/message`)
-        .send({ text: this.state.text })
+        .send({ text: value })
 
       console.log(response)
     } catch (error) {
@@ -38,53 +35,38 @@ class App extends React.Component {
     }
   }
 
-  onChange = event => {
-    this.setState({
-      text: event.target.value
-    })
-  }
+  createChannel = async (value) => {
+    try {
+      const response = await superagent
+        .post(`${baseUrl}/channel`)
+        .send({ name: value })
 
-  reset = () => {
-    this.setState({ text: '' })
+      console.log(response)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   render () {
-    const messages = this
-      .props
-      .messages
-      .map(message => <p>{message}</p>)
-
     const channels = this
       .props
       .channels
-      .map(channel => <p>{channel}</p>)
+      .map(channel => <div>
+        <Link to={`/messages/${channel}`}>{channel}</Link>
+      </div>)
 
     return <main>
-      <form onSubmit={this.onSubmit}>
-        <input
-          type='text'
-          onChange={this.onChange}
-          value={this.state.text}
-        />
-        <button>Send</button>
-
-        <button onClick={this.reset}>
-          Reset
-        </button>
-      </form>
-
       <h3>Channels</h3>
+      <Form onSubmit={this.createChannel} />
       {channels}
 
-      <h3>Messages</h3>
-      {messages}
+      <Route path='/messages/:channel' component={Messages}/>
     </main>
   }
 }
 
 function mapStateToProps (state) {
   return {
-    messages: state.messages,
     channels: state.channels
   }
 }
