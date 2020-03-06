@@ -7,7 +7,7 @@ class App extends React.Component {
     text: ''
   }
 
-  stream = new EventSource('http://localhost:4000/stream')
+  stream = new EventSource('https://aqueous-island-05561.herokuapp.com/stream')
 
   componentDidMount () {
     this.stream.onmessage = (event) => {
@@ -26,7 +26,7 @@ class App extends React.Component {
 
     try {
       const response = await superagent
-        .post('http://localhost:4000/message')
+        .post('https://aqueous-island-05561.herokuapp.com/message')
         .send({ text: this.state.text })
 
       console.log(response)
