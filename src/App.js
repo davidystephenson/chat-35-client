@@ -63,9 +63,15 @@ class App extends React.Component {
   }
 }
 
+function mapStateToProps (state) {
+  return {
+    messages: state.messages
+  }
+}
 
-// export default connect()(App);
 
-const connector = connect()
+// export default connect(mapStateToProps)(App);
+
+const connector = connect(mapStateToProps)
 const connected = connector(App)
 export default connected
